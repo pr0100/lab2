@@ -18,35 +18,31 @@ BinaryTree::~BinaryTree()
 	delete_tree(root);
 }
 
-void BinaryTree::insert(const int val)
-{
-	TreeNode* node = new TreeNode(val);
-	TreeNode* point;
-	TreeNode* prevPoint = node->get_parent();
-	point = root;
-	while (point != nullptr)
-	{
-		prevPoint = point;
-		if (val < point->get_data())
-			point = point->get_left();
-		else
-			point = point->get_right();
-	}
-	node->set_parent(prevPoint);
-	insert(val, node);
-}
 
 void BinaryTree::insert(const int val, TreeNode* node)
 {
-	if (node->get_parent() == nullptr)                       
-		root = node;
+	if (val < node->get_data())
+	{
+		if (node->get_left() == nullptr)
+			node->set_left(new TreeNode(val));
+		else
+			this->insert(val, node->get_left());
+	}
 	else
 	{
-		if (val < node->get_parent()->get_data())
-			node->get_parent()->set_left(node);
+		if (node->get_right() == nullptr)
+			node->set_right(new TreeNode(val));
 		else
-			node->get_parent()->set_right(node);
+			this->insert(val, node->get_right());
 	}
+}
+
+void BinaryTree::insert(const int val)
+{
+	if (root == nullptr)
+		this->root = new TreeNode(val);
+	else
+		this->insert(val, this->root);
 }
 
 TreeNode* BinaryTree::search(const int val, TreeNode* node) const
